@@ -241,6 +241,21 @@ class PixiJSGrid extends PIXI.Graphics {
   }
 
   /**
+   * Transforms global coordinates to grid coordinates.
+   * @param {number} x
+   * The global X coordinate.
+   * 
+   * @param {number} y
+   * The global Y coordinate. 
+   */
+  getRealCoordinates(cellX, cellY)  {
+    return {
+      x: this.bounds.x1 + (cellX * this.cellSize),
+      y: this.bounds.y1 + (cellY * this.cellSize),
+    };
+  }
+
+  /**
    * Callback fired after detecting a mousemove event.
    * 
    * @param {PIXI.InteractionData} evt
@@ -258,8 +273,8 @@ class PixiJSGrid extends PIXI.Graphics {
   _correctWidth() {
     if (!this._useCorrectedWidth) {
       this._correctedWidth = this._gridWidth;
+    } else {
+      this._correctedWidth = Math.ceil(Math.sqrt(this._gridWidth)) ** 2;
     }
-
-    this._correctedWidth = Math.ceil(Math.sqrt(this._gridWidth)) ** 2;
   }
 }

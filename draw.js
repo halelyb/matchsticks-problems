@@ -2,8 +2,7 @@ function getMaxMultiplyOf(a, n) {
   return a * Math.floor(n/a);
 }
 
-function onDragStart(event)
-{
+function onDragStart(event) {
     //console.log('onDragStart');
 
     // store a reference to the data
@@ -28,12 +27,12 @@ function onDragStart(event)
     this.dragging = true;
 }
 
-function onDragEnd()
-{
+function onDragEnd() {
     //console.log('onDragEnd');
     
-    var {x,y} = grid.getCellCoordinates(this.position.x, this.position.y);
-    var p = grid.getRealCoordinates(x, y);
+    var cell = grid.getCellCoordinates(this.position.x, this.position.y);
+    var p = grid.getRealCoordinates(cell.x, cell.y);
+
     const localBounds = this.getLocalBounds();
     this.pivot.set(localBounds.x, localBounds.y);
     this.position.set(p.x, p.y);
@@ -46,8 +45,7 @@ function onDragEnd()
     this.dragDropData = null;
 }
 
-function onDragMove()
-{
+function onDragMove() {
     if (this.dragging)
     {
         var newPosition = this.dragDropData.getLocalPosition(this.parent);
