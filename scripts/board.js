@@ -10,7 +10,7 @@ class Board {
 		const _m = this.m;
 		const _arr = this.arr;
 
-		this.arr = arr;
+		this.arr = arr.map(col => col.map(row => row));
 		this.n = arr.length;
 		this.m = arr[0].length;
 
