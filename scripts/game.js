@@ -1,8 +1,44 @@
 define(['pixijs-grid', 'matchstick', 'board'], function() {
 	class Game {
-		constructor(canvasElementId, n, m, cellSize) {
-			this.board = new Board(n, m);
-			
+		constructor(canvasElementId, cellSize) {
+			this.board = new Board(8,8);
+			this.cellSize = cellSize;
+			this.gameCanvas = document.getElementById(canvasElementId);
+
+			this.renderer = PIXI.autoDetectRenderer({
+				height: this.gameCanvas.clientHeight,
+				width: this.gameCanvas.clientWidth,
+				view: this.gameCanvas 
+			});
+
+			this.renderer.backgroundColor = 0xFFFFFF;
+		}
+
+		setProblem(arr) {
+			this.board.set(arr);
+
+
+			// this.stage.children.forEach(c => {
+			// 	if (c instanceof Matchstick) {
+			// 		this.stage.removeChild(c);
+			// 		c.clear();
+			// 		c.destroy();
+			// 	}
+			// });
+
+			if (this.stage)
+				this.stage.destroy();
+
+			this.start(this.board.n, this.board.m, this.cellSize);
+
+			this.board.getMatchsticks().forEach(mData => {
+				this.drawMatchstick(mData.x, mData.y, mData.direction);
+			});
+		}
+
+		start(n, m, cellSize) {			
+			this.stage = new PIXI.Container();
+
 			const gridWidth = Math.max(n,m) * cellSize;
 			const lineWidth = 1;
 			const gridColor = 0x0000FF;
@@ -15,36 +51,7 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 				}, 
 				false, // normalize grid size
 				false); // draw edges
-
-			this.gameCanvas = document.getElementById(canvasElementId);
-			this.start(canvasElementId);
-		}
-
-		setProblem(arr) {
-			this.board.set(arr);
-
-			this.stage.children.forEach(c => {
-				if (c instanceof Matchstick) {
-					this.stage.removeChild(c);
-					c.clear();
-					c.destroy();
-				}
-			});
-
-			this.board.getMatchsticks().forEach(mData => {
-				this.drawMatchstick(mData.x, mData.y, mData.direction);
-			});
-		}
-
-		start() {			
-			this.stage = new PIXI.Container();
-			this.renderer = PIXI.autoDetectRenderer({
-				height: this.gameCanvas.clientHeight,
-				width: this.gameCanvas.clientWidth,
-				view: this.gameCanvas 
-			});
-
-			this.renderer.backgroundColor = 0xFFFFFF;
+			
 
 			this.grid.x = (this.renderer.width - this.grid.gridWidth) / 2;
 			this.grid.y = (this.renderer.height - this.grid.gridWidth) / 2;

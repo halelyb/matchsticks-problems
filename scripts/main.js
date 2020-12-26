@@ -213,10 +213,10 @@ function invertArray(arr) {
 }
 
 require(['game'], function (Game){
-	const x = new Game('gameCanvas', 8, 8, 50);
+	const x = new Game('gameCanvas', 50);
 
   function startPuzzle(p) {
-    document.getElementById("promptContainer").innerHtml = p.prompt;
+    document.getElementById("promptContainer").innerHTML = p.prompt;
     x.setProblem(p.arr);
   }
 
@@ -227,12 +227,11 @@ require(['game'], function (Game){
 
     var link = document.createElement("a");
     link.href = "#";
-    link.appendChild(document.createTextNode("Puzzle " + i))
+    link.appendChild(document.createTextNode("Puzzle " + String(i + 1)))
     link.onclick = function() {
       startPuzzle(p);
-    }
+    };
 
     links.appendChild(link);
-
   });
 })
