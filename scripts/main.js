@@ -213,7 +213,7 @@ function invertArray(arr) {
 }
 
 require(['game'], function (Game){
-	const x = new Game('gameCanvas', 50);
+	const x = new Game('gameCanvas');
 
   function startPuzzle(p) {
     document.getElementById("promptContainer").innerHTML = p.prompt;

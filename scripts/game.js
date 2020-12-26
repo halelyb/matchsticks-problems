@@ -1,8 +1,7 @@
 define(['pixijs-grid', 'matchstick', 'board'], function() {
 	class Game {
-		constructor(canvasElementId, cellSize) {
+		constructor(canvasElementId) {
 			this.board = new Board(8,8);
-			this.cellSize = cellSize;
 			this.gameCanvas = document.getElementById(canvasElementId);
 
 			this.renderer = PIXI.autoDetectRenderer({
@@ -17,27 +16,20 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 		setProblem(arr) {
 			this.board.set(arr);
 
-
-			// this.stage.children.forEach(c => {
-			// 	if (c instanceof Matchstick) {
-			// 		this.stage.removeChild(c);
-			// 		c.clear();
-			// 		c.destroy();
-			// 	}
-			// });
-
 			if (this.stage)
 				this.stage.destroy();
 
-			this.start(this.board.n, this.board.m, this.cellSize);
+			this.start(this.board.n, this.board.m);
 
 			this.board.getMatchsticks().forEach(mData => {
 				this.drawMatchstick(mData.x, mData.y, mData.direction);
 			});
 		}
 
-		start(n, m, cellSize) {			
-			this.stage = new PIXI.Container();
+		start(n, m) {			
+			const stage = new PIXI.Container();
+
+			var cellSize = Math.min(this.renderer.width / n, this.renderer.height / m);
 
 			const gridWidth = Math.max(n,m) * cellSize;
 			const lineWidth = 1;
@@ -56,10 +48,15 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 			this.grid.x = (this.renderer.width - this.grid.gridWidth) / 2;
 			this.grid.y = (this.renderer.height - this.grid.gridWidth) / 2;
 
-			this.stage.addChild(this.grid.drawGrid());
+			stage.addChild(this.grid.drawGrid());
 
-			// run the render loop			
-			this.animate();
+			this.stage = stage;
+
+			// run the render loop	
+			if (!this.animationStarted) {		
+				this.animate();
+				this.animationStarted = true;
+			}
 		}
 
 		animate() {
