@@ -33,7 +33,7 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 
 			const gridWidth = Math.max(n,m) * cellSize;
 			const lineWidth = 1;
-			const gridColor = 0x0000FF;
+			const gridColor = 0x7291c8;
 			this.grid = new PixiJSGrid(
 				gridWidth, 
 				cellSize, 

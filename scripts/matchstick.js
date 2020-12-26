@@ -14,11 +14,11 @@ class Matchstick extends PIXI.Graphics {
 		const direction = this.direction;
 		const headX = headPosition.x;
 		const headY = headPosition.y;
-		const hitWidth = 6;
-		const stickWidth = 3;
+		const hitWidth = 7;
+		const stickWidth = 4;
 		const headLength = length * .1;
 
-		this.lineStyle(hitWidth, 0xFF3300, 1);
+		this.lineStyle(hitWidth, 0xf71419, 1);
 		this.moveTo(headX, headY);
 
 		switch (direction) {
@@ -61,7 +61,7 @@ class Matchstick extends PIXI.Graphics {
 			break;
 		}
 
-		this.lineStyle(stickWidth, 0xcd853f, 1);
+		this.lineStyle(stickWidth, 0xe5be96, 1);
 
 		switch (direction) {
 			case 'N':
