@@ -12,7 +12,6 @@ class Matchstick extends PIXI.Graphics {
 	draw(headPosition) {
 		const length = this.stickLength;
 		const direction = this.direction;
-		console.log(headPosition);
 		const headX = headPosition.x;
 		const headY = headPosition.y;
 		const hitWidth = 4;

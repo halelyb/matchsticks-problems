@@ -1,4 +1,4 @@
-define(['pixijs-grid', 'matchstick', 'board', 'hammer.min'], function() {
+define(['pixijs-grid', 'matchstick', 'board'], function() {
 	class Game {
 		constructor(canvasElementId, n, m, cellSize) {
 			this.board = new Board(n, m);
@@ -22,6 +22,14 @@ define(['pixijs-grid', 'matchstick', 'board', 'hammer.min'], function() {
 
 		setProblem(arr) {
 			this.board.set(arr);
+
+			this.stage.children.forEach(c => {
+				if (c instanceof Matchstick) {
+					this.stage.removeChild(c);
+					c.clear();
+					c.destroy();
+				}
+			});
 
 			this.board.getMatchsticks().forEach(mData => {
 				this.drawMatchstick(mData.x, mData.y, mData.direction);
