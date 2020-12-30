@@ -81,16 +81,7 @@ class Matchstick extends PIXI.Graphics {
 		return this;
 	}
 
-	rotate(degrees) {
-		const head = this.getLocalHeadPosition();
-		this.pivot.set(head.x, head.y);
-		this.angle = degrees;
-	}
-
-	moveHeadTo(position, rotation) {
-		if (rotation)
-	    	this.angle += rotation;
-
+	moveHeadTo(position) {
 		const head = this.getLocalHeadPosition();
 		this.pivot.set(head.x, head.y);
 	    this.position.set(position.x, position.y);

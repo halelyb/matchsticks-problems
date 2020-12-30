@@ -99,31 +99,18 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 			    .on('touchmove', this.onDragMove);		    
 		}
 
-		rotateMatchstick(matchstick) {		
-			var i = Matchstick.directions.findIndex(d => d == matchstick.direction) + 1;
+		deleteMatchstick(matchstick) {
 			var cellX = matchstick.cell.x;
 			var cellY = matchstick.cell.y;
+
+			this.board.removeMatchstick(cellX, cellY, matchstick.direction);
 
 			this.stage.removeChild(matchstick);
 			matchstick.clear();
 			matchstick.destroy();
-			this.board.removeMatchstick(cellX, cellY, matchstick.direction);
-
-			while (!this.addMatchstick(cellX, cellY, Matchstick.directions[i % Matchstick.directions.length])) {
-				i += 1;		
-			}
 		}
 
 		onDragStart(event) {
-			const now = new Date();
-			const diff = now - this.click1Time;				
-			if (diff < 600) {
-				//(this.game.onDragEnd.bind(this))();
-				this.game.rotateMatchstick(this);
-				return;
-			}
-			this.click1Time = now;
-
 			this.positionBeforeDrag = this.getHeadPosition();	    
 			this.board.removeMatchstick(this.cell.x, this.cell.y, this.direction);
 
@@ -158,11 +145,62 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 
 			var p = this.grid.getRealCoordinates(cell.x, cell.y);
 
+			var realtivePositionInCell = {
+				x: (head.x - p.x) / this.grid.cellSize,
+				y: (head.y - p.y) / this.grid.cellSize
+			}
+			const headAccuracy = 0.2;			
 
-			if (cell.x < (this.board.n - 1) && (head.x - p.x) > (this.grid.cellSize / 2))
+			switch (this.direction) {
+				case 'N':
+					if (realtivePositionInCell.x > (1 - headAccuracy)) {
+						cell.x += 1;
+					} else {
+						if (realtivePositionInCell.x > headAccuracy) {
+							this.game.deleteMatchstick(this);
+							this.game.addMatchstick(cell.x + 1, cell.y + 1, 'E');
+							return;
+						}
+					}
+					break;
+				case 'S':
+					if (realtivePositionInCell.x > (1 - headAccuracy)) {
+						cell.x += 1;
+					} else {
+						if (realtivePositionInCell.x > headAccuracy) {
+							this.game.deleteMatchstick(this);
+							this.game.addMatchstick(cell.x, cell.y, 'W');
+							return;
+						}
+					}
+					break;
+				case 'E':
+					if (realtivePositionInCell.y > (1 - headAccuracy)) {
+						cell.y += 1;
+					} else {
+						if (realtivePositionInCell.y > headAccuracy) {
+							this.game.deleteMatchstick(this);
+							this.game.addMatchstick(cell.x, cell.y + 1, 'S');
+							return;
+						}
+					}
+					break;
+				case 'W':
+					if (realtivePositionInCell.y > (1 - headAccuracy)) {
+						cell.y += 1;
+					} else {
+						if (realtivePositionInCell.y > headAccuracy) {
+							this.game.deleteMatchstick(this);
+							this.game.addMatchstick(cell.x + 1, cell.y, 'N');
+							return;
+						}
+					}
+					break;
+			}
+
+			if (cell.x < (this.board.n - 1) && realtivePositionInCell.x > (1 - headAccuracy))
 				cell.x += 1;
-
-			if (cell.y < (this.board.m - 1) && (head.y - p.y) > (this.grid.cellSize / 2))
+			if (cell.y < (this.board.m - 1) && realtivePositionInCell.y > (1 - headAccuracy))
 				cell.y += 1;
 
 	        if (this.board.addMatchstick(cell.x, cell.y, this.direction)) {
