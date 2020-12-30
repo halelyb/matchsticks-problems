@@ -192,22 +192,28 @@ require(['game'], function (Game){
 	const x = new Game('gameCanvas');
 
   function startPuzzle(p) {
+    Array.from(document.getElementById("puzzle-links").children).forEach(l => {
+      l.classList.remove('selected');
+    });
+
+    document.getElementById('puzzle-' + p.id + '-link').classList.add('selected');
     document.getElementById("promptContainer").innerHTML = p.prompt;
     x.setProblem(p.arr);
   }
 
-  startPuzzle(puzzles[0]);
-
   puzzles.forEach((p, i) => {
     var links = document.getElementById("puzzle-links");
+    p.id = i+1;
 
     var link = document.createElement("a");
+    link.id = 'puzzle-' + p.id + '-link';
     link.href = "#";
-    link.appendChild(document.createTextNode("Puzzle " + String(i + 1)))
+    link.appendChild(document.createTextNode("Puzzle " + p.id))
     link.onclick = function() {
       startPuzzle(p);
     };
-
-    links.appendChild(link);
+  links.appendChild(link);
   });
+  
+  startPuzzle(puzzles[0]);
 })
