@@ -241,12 +241,12 @@ class PixiJSGrid extends PIXI.Graphics {
   }
 
   /**
-   * Transforms global coordinates to grid coordinates.
+   * Transforms grid coordinates to global coordinates.
    * @param {number} x
-   * The global X coordinate.
+   * The grid X coordinate.
    * 
    * @param {number} y
-   * The global Y coordinate. 
+   * The grid Y coordinate. 
    */
   getRealCoordinates(cellX, cellY)  {
     return {
