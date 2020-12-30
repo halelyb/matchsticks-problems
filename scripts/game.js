@@ -11,6 +11,44 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 			});
 
 			this.renderer.backgroundColor = 0xFFFFFF;
+
+			window.addEventListener("keyup", this.onkeyup.bind(this), false);
+		}
+
+		onkeyup() {
+			// if (this.selctedMatchstick) {
+			// 	this.selctedMatchstick.rotate(); // += 90;
+
+				// var graphics = new PIXI.Graphics();	
+				// var b = this.selctedMatchstick.getBounds();
+				// graphics.lineStyle(2, 0xFF0000);
+				// graphics.drawRect(b.x, b.y, b.width, b.height);
+				// this.stage.addChild(graphics);
+
+
+				var i = Matchstick.directions.findIndex(d => d == this.selctedMatchstick.direction) + 1;
+				var p = this.selctedMatchstick.position;
+				var d = this.selctedMatchstick.dragging; 
+				var dragDropData = this.selctedMatchstick.dragDropData;
+
+
+				this.stage.removeChild(this.selctedMatchstick);
+				this.selctedMatchstick.clear();
+				this.selctedMatchstick.destroy();
+
+				var m = this.drawMatchstick(p, 0, 0, Matchstick.directions[i % Matchstick.directions.length]);
+				m.dragging = d;
+				m.dragDropData = dragDropData;
+
+				this.selctedMatchstick = m;
+		}
+
+		drawBounds(g) {
+			var graphics = new PIXI.Graphics();	
+				var b = g.getLocalBounds();
+				graphics.lineStyle(2, 0x000000);
+				graphics.drawRect(b.x, b.y, b.width, b.height);
+				this.stage.addChild(graphics);
 		}
 
 		setProblem(arr) {
@@ -22,14 +60,15 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 			this.start(this.board.n, this.board.m);
 
 			this.board.getMatchsticks().forEach(mData => {
-				this.drawMatchstick(mData.x, mData.y, mData.direction);
+				var position = this.grid.getRealCoordinates(mData.x,mData.y);
+				this.drawMatchstick(position, mData.x, mData.y, mData.direction);
 			});
 		}
 
 		start(n, m) {			
 			const stage = new PIXI.Container();
 
-			var cellSize = Math.min(this.renderer.width / n, this.renderer.height / m);
+			var cellSize = Math.min(this.renderer.width / (n + 1), this.renderer.height / (m + 1));
 
 			const gridWidth = Math.max(n,m) * cellSize;
 			const lineWidth = 1;
@@ -68,11 +107,12 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 			if (!this.board.addMatchstick(cellX, cellY, direction))
 				return false;
 
-			return this.drawMatchstick(cellX, cellY, direction);
+			var position = this.grid.getRealCoordinates(cellX,cellY);
+			return this.drawMatchstick(position, cellX,cellY, direction);
 		}
 
-		drawMatchstick(cellX, cellY, direction) {
-			var position = this.grid.getRealCoordinates(cellX,cellY);
+		drawMatchstick(position, cellX,cellY, direction) {
+			
 			var matchstick = new Matchstick(position, { x: cellX, y: cellY }, direction, this.grid.cellSize);
 			this.configureDragAndDrop(matchstick);
 			this.stage.addChild(matchstick);
@@ -115,17 +155,19 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 		}
 
 		onDragStart(event) {
-			const now = new Date();
-			const diff = now - this.click1Time;				
-			if (diff < 600) {
-				//(this.game.onDragEnd.bind(this))();
-				this.game.rotateMatchstick(this);
-				return;
-			}
-			this.click1Time = now;
+			// const now = new Date();
+			// const diff = now - this.click1Time;				
+			// if (diff < 600) {
+			// 	//(this.game.onDragEnd.bind(this))();
+			// 	this.game.rotateMatchstick(this);
+			// 	return;
+			// }
+			// this.click1Time = now;
 
 			this.positionBeforeDrag = this.getHeadPosition();	    
 			this.board.removeMatchstick(this.cell.x, this.cell.y, this.direction);
+
+			this.game.selctedMatchstick = this;
 
 		    // store a reference to the data
 		    // the reason for this is because of multitouch
@@ -158,7 +200,6 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 
 			var p = this.grid.getRealCoordinates(cell.x, cell.y);
 
-
 			if (cell.x < (this.board.n - 1) && (head.x - p.x) > (this.grid.cellSize / 2))
 				cell.x += 1;
 
@@ -181,6 +222,8 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 
 			// set the interaction data to null
 			this.dragDropData = null;
+
+			this.game.selctedMatchstick = null;
 		}
 
 		onDragMove() {
