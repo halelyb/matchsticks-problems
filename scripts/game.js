@@ -148,43 +148,53 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 			var realtivePositionInCell = {
 				x: (head.x - p.x) / this.grid.cellSize,
 				y: (head.y - p.y) / this.grid.cellSize
-			}
-			const headAccuracy = 0.2;			
+			}			
+
+			const originalCell = this.cell;			
 
 			switch (this.direction) {
 				case 'N':
-					if (realtivePositionInCell.x > headAccuracy && realtivePositionInCell.x < (1 - headAccuracy)) {
+					if (realtivePositionInCell.x > Game.headAccuracy && realtivePositionInCell.x < (1 - Game.headAccuracy)) {
 						this.game.deleteMatchstick(this);
-						this.game.addMatchstick(cell.x + 1, cell.y + 1, 'E');
-						return;
+						if (this.game.addMatchstick(cell.x + 1, cell.y + 1, 'E'))
+							return;
+						else
+							return this.game.addMatchstick(originalCell.x, originalCell.y, 'N')
 					}
 					break;
 				case 'S':
-					if (realtivePositionInCell.x > headAccuracy && realtivePositionInCell.x < (1 - headAccuracy)) {
+					if (realtivePositionInCell.x > Game.headAccuracy && realtivePositionInCell.x < (1 - Game.headAccuracy)) {
 						this.game.deleteMatchstick(this);
-						this.game.addMatchstick(cell.x, cell.y, 'W');
-						return;
+						if (this.game.addMatchstick(cell.x, cell.y, 'W'))
+							return;
+						else
+							return this.game.addMatchstick(originalCell.x, originalCell.y, 'S')
 					}
 					break;
 				case 'E':
-					if (realtivePositionInCell.y > headAccuracy && realtivePositionInCell.y < (1 - headAccuracy)) {
+					if (realtivePositionInCell.y > Game.headAccuracy && realtivePositionInCell.y < (1 - Game.headAccuracy)) {
 						this.game.deleteMatchstick(this);
-						this.game.addMatchstick(cell.x, cell.y + 1, 'S');
-						return;
+						if (this.game.addMatchstick(cell.x, cell.y + 1, 'S'))
+							return;
+						else
+							return this.game.addMatchstick(originalCell.x, originalCell.y, 'E')
 					}
 					break;
 				case 'W':
-					if (realtivePositionInCell.y > headAccuracy && realtivePositionInCell.y < (1 - headAccuracy)) {
+					if (realtivePositionInCell.y > Game.headAccuracy && realtivePositionInCell.y < (1 - Game.headAccuracy)) {
 						this.game.deleteMatchstick(this);
-						this.game.addMatchstick(cell.x + 1, cell.y, 'N');
-						return;
+						if (this.game.addMatchstick(cell.x + 1, cell.y, 'N'))
+							return;
+						else
+							return this.game.addMatchstick(originalCell.x, originalCell.y, 'W')
+
 					}
 					break;
 			}
 
-			if (cell.x < (this.board.n - 1) && realtivePositionInCell.x > (1 - headAccuracy))
+			if (cell.x < (this.board.n - 1) && realtivePositionInCell.x > (1 - Game.headAccuracy))
 				cell.x += 1;
-			if (cell.y < (this.board.m - 1) && realtivePositionInCell.y > (1 - headAccuracy))
+			if (cell.y < (this.board.m - 1) && realtivePositionInCell.y > (1 - Game.headAccuracy))
 				cell.y += 1;
 
 	        if (this.board.addMatchstick(cell.x, cell.y, this.direction)) {
@@ -214,6 +224,8 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 		    }
 		}
 	}	
+
+	Game.headAccuracy = 0.2;
 
 	return Game;
 });
