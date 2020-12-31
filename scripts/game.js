@@ -29,7 +29,7 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 		start(n, m) {			
 			const stage = new PIXI.Container();
 
-			var cellSize = Math.min(this.renderer.width / n, this.renderer.height / m);
+			var cellSize = Math.min(this.renderer.width / (n+1), this.renderer.height / (m+1));
 
 			const gridWidth = Math.max(n,m) * cellSize;
 			const lineWidth = 1;
