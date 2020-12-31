@@ -153,47 +153,31 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 
 			switch (this.direction) {
 				case 'N':
-					if (realtivePositionInCell.x > (1 - headAccuracy)) {
-						cell.x += 1;
-					} else {
-						if (realtivePositionInCell.x > headAccuracy) {
-							this.game.deleteMatchstick(this);
-							this.game.addMatchstick(cell.x + 1, cell.y + 1, 'E');
-							return;
-						}
+					if (realtivePositionInCell.x > headAccuracy && realtivePositionInCell.x < (1 - headAccuracy)) {
+						this.game.deleteMatchstick(this);
+						this.game.addMatchstick(cell.x + 1, cell.y + 1, 'E');
+						return;
 					}
 					break;
 				case 'S':
-					if (realtivePositionInCell.x > (1 - headAccuracy)) {
-						cell.x += 1;
-					} else {
-						if (realtivePositionInCell.x > headAccuracy) {
-							this.game.deleteMatchstick(this);
-							this.game.addMatchstick(cell.x, cell.y, 'W');
-							return;
-						}
+					if (realtivePositionInCell.x > headAccuracy && realtivePositionInCell.x < (1 - headAccuracy)) {
+						this.game.deleteMatchstick(this);
+						this.game.addMatchstick(cell.x, cell.y, 'W');
+						return;
 					}
 					break;
 				case 'E':
-					if (realtivePositionInCell.y > (1 - headAccuracy)) {
-						cell.y += 1;
-					} else {
-						if (realtivePositionInCell.y > headAccuracy) {
-							this.game.deleteMatchstick(this);
-							this.game.addMatchstick(cell.x, cell.y + 1, 'S');
-							return;
-						}
+					if (realtivePositionInCell.y > headAccuracy && realtivePositionInCell.y < (1 - headAccuracy)) {
+						this.game.deleteMatchstick(this);
+						this.game.addMatchstick(cell.x, cell.y + 1, 'S');
+						return;
 					}
 					break;
 				case 'W':
-					if (realtivePositionInCell.y > (1 - headAccuracy)) {
-						cell.y += 1;
-					} else {
-						if (realtivePositionInCell.y > headAccuracy) {
-							this.game.deleteMatchstick(this);
-							this.game.addMatchstick(cell.x + 1, cell.y, 'N');
-							return;
-						}
+					if (realtivePositionInCell.y > headAccuracy && realtivePositionInCell.y < (1 - headAccuracy)) {
+						this.game.deleteMatchstick(this);
+						this.game.addMatchstick(cell.x + 1, cell.y, 'N');
+						return;
 					}
 					break;
 			}

@@ -77,19 +77,19 @@ class Board {
 				this.arr[i][j] && this.arr[i][j].split('').forEach((function (m) {
 					switch(m) {
 						case 'N':
-							if (i > this.n - 2 || this.includesIfNotEmpty(i,j+1,'S'))
+							if (j > (this.m - 1) || this.includesIfNotEmpty(i,j+1,'S'))
 								response = false;
 							break;
 						case 'S':
-							if (i < 1 || this.includesIfNotEmpty(i,j-1,'N'))
+							if (j < 1 || this.includesIfNotEmpty(i,j-1,'N'))
 								response =  false;
 							break;
 						case 'E':
-							if (j > this.m - 2 || this.includesIfNotEmpty(i-1,j,'W'))
+							if (i < 1 || this.includesIfNotEmpty(i-1,j,'W'))
 								response =  false;
 							break;
 						case 'W':
-							if (j < 1 || this.includesIfNotEmpty(i+1,j,'E'))
+							if (i > (this.n - 1) || this.includesIfNotEmpty(i+1,j,'E'))
 								response = false;
 							break;
 					}
@@ -101,7 +101,7 @@ class Board {
 	}
 
 	includesIfNotEmpty(i, j, d) {
-		if (!!this.arr[i][j])
+		if (this.arr[i] && this.arr[i][j])
 			return this.arr[i][j].includes(d);
 		else
 			return false;
