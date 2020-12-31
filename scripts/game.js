@@ -137,6 +137,9 @@ define(['pixijs-grid', 'matchstick', 'board'], function() {
 		}
 
 		onDragEnd() {
+			if (!this.dragging)
+				return;
+
 			var head = this.getHeadPosition();
 
 	        var cell = this.grid.getCellCoordinates(head.x, head.y);
